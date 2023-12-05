@@ -1,3 +1,6 @@
+<head>
+    <title>Input page</title>
+</head>
 <x-app-layout>
 <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -8,7 +11,7 @@
     <br/>
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100:" style="text-align: center;">
-                    <form method="POST" action='{{route("profile.store")}}' enctype="multipart/form-data">
+                    <form method="POST" action='{{route("webapp.store")}}' enctype="multipart/form-data">
 
                         @csrf
                         
@@ -21,17 +24,23 @@
     
 
     @if (!empty($id))
-        <a href="{{url('/create', [$id, $originalName])}}">{{$id}} {{$originalName}}</a>
+        <p>Link to view:</p>
+        <a href="{{url('/create', [$id, $originalName])}}" style="color:red">{{$id}} {{$originalName}}</a>
+        <br/>
         <br/>
     @endif
 
     
 
     @isset($id)
+        <p>Details:</p>
+        ID:
         {{$id}}
         <br/>
+        Original Name:
         {{$originalName}}
         <br/>
+        Mimetype:
         {{$mimeType}}
         <br/>
         {{$path}}

@@ -29,6 +29,7 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
+    //premade stuff for the profile, BREEZE MADE THESE 3
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -36,30 +37,39 @@ Route::middleware('auth')->group(function () {
     Route::get('/create', [WebAppController::class, 'create'])->middleware('can:create,App\Models\Upload');
     // Route::post('/uploads/create', [WebAppController::class, 'store'])->name('profile.store');
 
-
     // Route::post('/uploads/create/{id}/{originalname}', [WebAppController::class, 'show'])->middleware('can:view, upload');
     Route::get('/create/{id}/{originalname}', [WebAppController::class, 'show'])->middleware('can:index,App\Models\Upload');
+
+    
+    //for editing
+    //Route::get('/uploads/{upload}/edit', [WebAppController::class, 'change'])->middleware('can:change,App\Models\Upload');
+    Route::get('/uploads/{id}/edit', [WebAppController::class, 'change'])->name('webapp.change');
+
+    //for deletion
+    //Route::delete('/uploads/{webapp}', [WebAppController::class, 'decimate'])->middleware('can:delete,user,App\Models\Upload')->name('webapp.decimate');
+    Route::delete('/uploads/{webapp}', [WebAppController::class, 'decimate'])->name('webapp.decimate');
+
+    //shows all the inputs on the database, username of uploader, etc
+    Route::get('/uploads', [WebAppController::class, 'index'])->middleware('can:viewAny,App\Models\Upload');
+
+    //Route::put('/uploads/{upload}/edit', [WebAppController::class, 'update'])->middleware('can:update,upload');
+    Route::post('/uploads/{webapp}/edit', [WebAppController::class, 'update'])->name('webapp.update');
+
 });
 
-Route::post('/create', [WebAppController::class, 'store'])->middleware(['auth', 'verified'])->name('profile.store');
+//Route::post('/uploads/{id}/edit', [WebAppController::class, 'change'])->middleware(['auth', 'verified'])->name('webapp.change');
 
-Route::post('/create/{id}/{originalname}', [WebAppController::class, 'show'])->middleware(['auth', 'verified'])->name('profile.show');
-    
-Route::get('/uploads', [WebAppController::class, 'index'])->middleware('can:viewAny,App\Models\Upload');
+Route::post('/create', [WebAppController::class, 'store'])->middleware(['auth', 'verified'])->name('webapp.store');
 
-Route::post('/uploads', [WebAppController::class, 'store'])->middleware('can:create,App\Models\Upload');
+Route::post('/create/{id}/{originalname}', [WebAppController::class, 'show'])->middleware(['auth', 'verified'])->name('webapp.show');
 
-Route::get('/uploads/{upload}/edit/', [WebAppController::class, 'edit'])->middleware('can:update,webapp');
 
-Route::get('/uploads/{upload}/{originalName}', [WebAppController::class, 'show'])->middleware('can:view,webapp');
-
-Route::get('/uploads/{upload}/file/{originalName?}', [WebAppController::class, 'file'])->middleware('can:view,upload');
-
-Route::delete('/uploads/{upload}', [WebAppController::class, 'destroy'])->middleware('can:delete,upload');
-
-Route::put('/uploads/{upload}', [WebAppController::class, 'update'])->middleware('can:update,upload');
 
 //routes for when a user clicks on a file in the create page
+Route::get('/uploads/{upload}/{originalName}', [WebAppController::class, 'show'])->middleware('can:view,webapp');
+
+
+
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/create/{id}/{originalname}', function () {

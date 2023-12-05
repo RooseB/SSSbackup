@@ -20,7 +20,7 @@ class WebAppController extends Controller
     {
         //
         $webapps = webapp::with('user')->get();
-        return view('welcome', ['webapps'=> $webapps]);
+        return view('uploads', ['webapps'=> $webapps]);
     }
 
     /**
@@ -39,7 +39,7 @@ class WebAppController extends Controller
     {
         //fix this future Ben :D
         // $request->validate([
-        //      'webapp'=>'required|mimes:csv, ods, xlsx'
+        //      $request =>'file|mimetypes:text/csv, application/vnd.oasis.opendocument.spreadsheet, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/excel',
         // ]);
 
         //dd($request);
@@ -71,16 +71,26 @@ class WebAppController extends Controller
         $webapps = webapp::findorFail($webapps->id);
 
         //I have no clue if this will work or not...
-        Excel::import(new UserImport, $webapps->originalName);
+        //Excel::import(new UserImport, $webapps->originalName);
 
         return response()->file(storage_path().'/app/'. $webapps->path);  
     }
 
     /**
      * Show the form for editing the specified resource.
+     * @param \App\Models\webapp $webapps
+     * @return \Illuminate\Http\Response
      */
-    public function edit(string $id)
+    public function change($id)
     {
+        //dd($id);
+        try{
+            $webapps = webapp::findOrFail($id);
+            //dd($$webapps = webapp::findOrFail($webapps));
+        }catch(ModelNotFoundException $e){
+           
+            return abort(404);
+        }
         //
         return view('edit',
         ['id'=>$webapps->id,
@@ -91,28 +101,53 @@ class WebAppController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\webapp  $webapps
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         //
-        $webapps = WebApp::findorFail($webapps->id);
-        Storage::delete($webapps -> path);
-        $webapps->origName = request()->file('webapp')->getClientOriginalName();
-		$webapps->path = request()->file('webapp')->store('webapps');
-		$webapps->mimeType = $request->file('webapp')->getClientMimeType();
+        //dd($request);
+        try{
+            $webapps = webapp::findOrFail($id);
+            //dd($$webapps = webapp::findOrFail($webapps));
+        }catch(ModelNotFoundException $e){
+           
+            return abort(404);
+        }
+
+        //Storage::delete($webapps -> path);
+        //dd($webapps);
+        $webapps->originalName = request()->file('WebAppTable')->getClientOriginalName();
+		$webapps->path = request()->file('WebAppTable')->store('webapps');
+		$webapps->mimeType = $request->file('WebAppTable')->getClientMimeType();
 		$webapps->save();
 		return back();
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param \App\Models\webapp $webapps
+     * @return \Iluminate\Http\Response
      */
-    public function destroy(string $id)
+    public function decimate($id)
     {
         //
-        $webapps = WebApp::findOrFail($webapps->id);
-        Storage::delete($webapps->path);
-        $webapps->delete();
-        return back()->with(['operation'=>'deleted', 'id'=>$webapps->id]);
+        //dd($webapp);
+    
+        //this line is causing it to fail
+        try{
+            $deleteWebapp = webapp::findOrFail($id);
+            //dd($deleteWebapp = webapp::findOrFail($webapp));
+        }catch(ModelNotFoundException $e){
+           
+            return abort(404);
+        }
+        
+         
+        Storage::delete($deleteWebapp->path);
+        $deleteWebapp->delete();
+        return to_route('dashboard');
     }
 }

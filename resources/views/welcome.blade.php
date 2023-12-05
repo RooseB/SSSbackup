@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,6 +14,7 @@
         <style>
 
         </style>
+        <title>Home Page</title>
     </head>
     <body class="antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
@@ -45,7 +45,7 @@
                 <br>
                 <br>
                 <h1>Please Sign In :)</h1>
-                <h1>Top Left buttons</h1>
+                <h1>Top Right buttons</h1>
 
 
                 <!--<a href="https://sssb00385953.duckdns.org">To the original website</a> -->

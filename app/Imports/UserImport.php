@@ -14,8 +14,6 @@ class UserImport implements ToModel
     */
     public function model(array $row)
     {
-        return new User([
-            //
-        ]);
+        return $this -> belongsTo('App\Models\User');
     }
 }
