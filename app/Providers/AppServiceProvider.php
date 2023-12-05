@@ -9,6 +9,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
+    protected $policies = [
+        'App\Models\webapp' => 'App\Policies\UploadPolicy',
+    ];
+
     public function register(): void
     {
         //
@@ -20,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        
     }
 }

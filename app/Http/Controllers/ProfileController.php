@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+use Maatwebsite\Excel\Facades\Excel;
+
 class ProfileController extends Controller
 {
     /**
@@ -56,5 +58,10 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function import(){
+        Excel::import(new UserImport, 'users.xlsx');
+        return redirect('/create')->with('success', 'All good!');
     }
 }
